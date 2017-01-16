@@ -1,0 +1,7 @@
+PCのスペック
+
+OS　Windows 10 Home Edition
+CPU　Intel Core i5-6200U　2コア／4スレッド、クロック数2.3GHz
+メモリ　4GB
+ハードディスク　500GB（設計上。実質的には450GB使用可能）
+
