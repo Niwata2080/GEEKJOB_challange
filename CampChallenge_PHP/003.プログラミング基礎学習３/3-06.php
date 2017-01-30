@@ -31,4 +31,7 @@
     }
 
     $results = my_profile('木');
-    var_dump($results); //できればechoしたい
+    var_dump($results);
+    foreach ($results as $key => $value){
+        echo $value . '<br>';
+    } //できればechoしたい

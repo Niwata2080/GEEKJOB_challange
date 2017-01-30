@@ -28,4 +28,3 @@ SELECT * FROM profiles WHERE profilesID=2;
 DELETE FROM profiles WHERE birthday='2000-12-24';
 SELECT * FROM profiles;
 
-
