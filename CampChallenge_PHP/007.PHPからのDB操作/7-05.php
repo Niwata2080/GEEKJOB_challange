@@ -5,12 +5,12 @@ try{
     $sql = "SELECT * FROM profiles WHERE name LIKE :partofname";
     
     $query = $pdo_object->prepare($sql);
-    $query->bindValue(':partofname', '%茂%');
+    $query->bindValue(':partofname', '%高%');
     $query->execute();
     
     $result = $query->fetchall(PDO::FETCH_ASSOC);
     
-    //var_dump($result);
+    var_dump($result);
     foreach ($result as $value){
         $prof = $value;
         foreach ($prof as $key => $value){
