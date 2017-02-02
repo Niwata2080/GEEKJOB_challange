@@ -34,3 +34,21 @@ function pdo_insert($obj_pdo, $sql, $params=array()) {
     
     return $stmt->rowCount();
 }
+
+class Select{
+    public function goSelect($tablename){
+        try {
+            $pdo = create_pdo();
+            
+            $sql = 'SELECT * FROM ' . $tablename;
+            $selectreturn = pdo_select($pdo, $sql);
+            return $selectreturn;
+            $pdo = null;
+            
+        } catch (Exception $err) {
+            $pdo = null;
+            echo $err->getMessage();
+            exit;
+        }
+    }
+}
