@@ -13,36 +13,7 @@ if ($_SESSION['flag'] !== true) {
     $selectall = new Select();
     $stocktable = $selectall->goSelect(DB_TBL_STOCK);
     var_dump($selectall);
-//class Select(){
-//    public function goSelect($tablename, $returnname, $modifier){
-//        try {
-//            $pdo = create_pdo();
-            
-//            $sql = 'SELECT * FROM ' . $tablename ;
-//            $returnname = pdo_select($pdo, $sql);
-//            $pdo = null;
-            
-//        } catch (Exception $err) {
-//            $pdo = null;
-//            echo $err->getMessage();
-//            exit;
-//        }
-//    }
-//}
-//    try {
-//        $pdo = create_pdo();
-        
-//        $sql_admin_user = 'SELECT * FROM ' . DB_TBL_STOCK;
-//        //var_dump($sql_admin_user);
-//        $stocktable = pdo_select($pdo, $sql_admin_user);
-        
-//        $pdo = null;
-        
-//    } catch (Exception $err) {
-//        $pdo = null;
-//        echo $err->getMessage();
-//        exit;
-//    }
+
 ?>
 <!DOCTYPE html>
 <html>
