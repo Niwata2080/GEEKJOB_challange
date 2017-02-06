@@ -1,5 +1,5 @@
 <?php
-const ROOT_URL = 'http://localhost/matome/app';     //indexディレクトリへのURL
+const ROOT_URL = 'http://localhost/UserManagementSystem-ver1.0/app';     //indexディレクトリへのURL
 const TOP_URI = '/';                                //トップページ
 const INSERT = 'insert.php';                   //登録ページ
 const INSERT_CONFIRM = 'insert_confirm.php';   //登録確認ページ
