@@ -18,6 +18,7 @@ foreach ($_POST as $key => $value) {
         $post_name = $_POST['name'];
         //date型にするために1桁の月日を2桁にフォーマットしてから格納
         $post_birthday = $_POST['year'].'-'.sprintf('%02d',$_POST['month']).'-'.sprintf('%02d',$_POST['day']);
+        //int型にする？
         $post_type = $_POST['type'];
         $post_tell = $_POST['tell'];
         $post_comment = $_POST['comment'];

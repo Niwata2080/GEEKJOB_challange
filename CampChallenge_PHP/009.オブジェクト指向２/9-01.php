@@ -6,7 +6,7 @@ abstract class Base {
         $loaded = $this->load();
         echo '<table border="1">' ;
         foreach($loaded as $key => $record){ 
-            if ($key == 0){ 
+            if ($key == 0){ //switchにするべき
             echo "<tr>";
                 foreach($record as $header => $value){ 
                 echo "<th>$header</th>";
