@@ -1,9 +1,10 @@
 <?php
 
 //DBへの接続を行う。成功ならPDOオブジェクトを、失敗なら中断、メッセージの表示を行う
+//一応静的プレースホルダにしてみた
 function connect2MySQL(){
     try{
-        $pdo = new PDO('mysql:host=localhost;dbname=Challenge_db;charset=utf8','hayashi','password');
+        $pdo = new PDO('mysql:host=localhost;dbname=Challenge_db;charset=utf8','hayashi','password', array(PDO::ATTR_EMULATE_PREPARES => false,));
         //SQL実行時のエラーをtry-catchで取得できるように設定
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
@@ -49,25 +50,25 @@ function insert_profiles($name, $birthday, $type, $tell, $comment){
     return null;
 }
 
-function serch_all_profiles(){
+function search_all_profiles(){
     //db接続を確立
     $search_db = connect2MySQL();
     
     $search_sql = "SELECT * FROM user_t";
     
     //クエリとして用意
-    $seatch_query = $search_db->prepare($search_sql);
+    $search_query = $search_db->prepare($search_sql);
     
     //SQLを実行
     try{
-        $seatch_query->execute();
+        $search_query->execute();
     } catch (PDOException $e) {
-        $seatch_query=null;
+        $search_query=null;
         return $e->getMessage();
     }
     
     //全レコードを連想配列として返却
-    return $seatch_query->fetchAll(PDO::FETCH_ASSOC);
+    return $search_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
 /**
@@ -77,44 +78,54 @@ function serch_all_profiles(){
  * @param type $type
  * @return type
  */
-function serch_profiles($name=null,$year=null,$type=null){
+function search_profiles($name=null,$year=null,$type=null){  //フォームからは""（空文字）が渡されるけどここのデフォルト値はnull issetではこの二つで挙動が変わってしまう
     //db接続を確立
     $search_db = connect2MySQL();
     
     $search_sql = "SELECT * FROM user_t";
-    $flag = false;
-    if(isset($name)){
+    $havename = false;
+    $haveyear = false;
+    $havetype = false;
+    //空文字だろうがnullだろうが値が入ってなかったらとにかくSQL文に含めたくない　のでissetからemptyに変える
+    //条件分岐が変→単にifの条件式で$flag = falseって代入になってただけだった
+    if(!empty($name)){  //名前が入ってたら
         $search_sql .= " WHERE name like :name";
-        $flag = true;
+        $havename = true;
     }
-    if(isset($year) && $flag = false){
+    if(!empty($year) && !$havename){  //年が入ってて名前が入ってなかったら
         $search_sql .= " WHERE birthday like :year";
-        $flag = true;
-    }else if(isset($year)){
+        $haveyear = true;
+    }else if(!empty($year)){  //年が入ってて名前も入ってたら
         $search_sql .= " AND birthday like :year";
+        $haveyear = true;
     }
-    if(isset($type) && $flag = false){
+    if(!empty($type) && !$havename && !$haveyear){  //タイプが入ってて名前も年も入ってなかったら
         $search_sql .= " WHERE type = :type";
-    }else if(isset($type)){
+        $havetype = true;
+    }else if(!empty($type)){
         $search_sql .= " AND type = :type";
+        $havetype = true;
     }
     
     //クエリとして用意
-    $seatch_query = $search_db->prepare($search_sql);
+    $search_query = $search_db->prepare($search_sql);
     
-    $seatch_query->bindValue(':name','%'.$name.'%');
-    $seatch_query->bindValue(':year','%'.$year.'%');
-    $seatch_query->bindValue(':type',$type);
+    //↑の分岐に合わせてバインドも分岐させる ％ってなんだっけ？
+    if($havename){$search_query->bindValue(':name','%'.$name.'%');}
+    if($haveyear){$search_query->bindValue(':year','%'.$year.'%');}
+    if($havetype){$search_query->bindValue(':type',$type);}
+    var_dump($search_query);
     //SQLを実行
     try{
-        $seatch_query->execute();
+        $search_query->execute();
+        $search_query->debugDumpParams();
     } catch (PDOException $e) {
-        $seatch_query=null;
+        $search_query=null;
         return $e->getMessage();
     }
     
     //該当するレコードを連想配列として返却
-    return $seatch_query->fetchAll(PDO::FETCH_ASSOC);
+    return $search_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
 

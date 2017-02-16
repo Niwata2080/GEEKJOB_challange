@@ -10,6 +10,11 @@ require_once '../common/dbaccesUtil.php';
       <title>検索結果画面</title>
 </head>
     <body>
+    <?php
+    //入力画面から「検索」ボタンを押した場合のみ処理を行う
+    if(!$_GET['mode']=="SEARCHING"){
+        echo 'アクセスルートが不正です。もう一度トップページからやり直してください<br>';
+    }else{ ?>
         <h1>検索結果</h1>
         <table border=1>
             <tr>
@@ -19,11 +24,12 @@ require_once '../common/dbaccesUtil.php';
                 <th>登録日時</th>
             </tr>
         <?php
+        var_dump($_GET);  //空文字列が入ってる
         $result = null;
         if(empty($_GET['name']) && empty($_GET['year']) && empty($_GET['type'])){
-            $result = serch_all_profiles();
+            $result = search_all_profiles();
         }else{
-            $result = serch_profiles($_GET['name'],$_GET['year'],$_GET['type']);
+            $result = search_profiles($_GET['name'],$_GET['year'],$_GET['type']);
         }
         foreach($result as $value){
         ?>
@@ -37,5 +43,8 @@ require_once '../common/dbaccesUtil.php';
         }
         ?>
         </table>
+    <?php
+    }
+    echo return_top(); ?>
 </body>
 </html>

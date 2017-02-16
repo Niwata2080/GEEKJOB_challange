@@ -31,9 +31,12 @@
         <?php
         for($i = 1; $i<=3; $i++){ ?>
         <input type="radio" name="type" value="<?php echo $i; ?>"><?php echo ex_typenum($i);?><br>
+        <input type="radio" name="type" value="" checked style="display:none;"> <!-- 未選択の時に空の値を送信する 職種が分からない人を探せるように-->
         <?php } ?>
         <br>
+        <input type="hidden" name="mode"  value="SEARCHING"> <!-- modeを付与 -->
         <input type="submit" name="btnSubmit" value="検索">
       </form>
+      <?php echo return_top(); ?>
   </body>
 </html>
