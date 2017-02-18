@@ -14,7 +14,13 @@ require_once '../common/dbaccesUtil.php';
     //入力画面から「検索」ボタンを押した場合のみ処理を行う
     if(!$_GET['mode']=="SEARCHING"){
         echo 'アクセスルートが不正です。もう一度トップページからやり直してください<br>';
-    }else{ ?>
+    }else{
+        //検索条件保存のため、セッションにGETの値を格納
+        session_start();
+        $_SESSION['sname'] = $_GET['name'];
+        $_SESSION['syear'] = $_GET['year'];
+        $_SESSION['stype'] = $_GET['type'];
+    ?>
         <h1>検索結果</h1>
         <table border=1>
             <tr>
@@ -24,7 +30,8 @@ require_once '../common/dbaccesUtil.php';
                 <th>登録日時</th>
             </tr>
         <?php
-        var_dump($_GET);  //空文字列が入ってる
+        var_dump($_GET);
+        var_dump($_SESSION);
         $result = null;
         if(empty($_GET['name']) && empty($_GET['year']) && empty($_GET['type'])){
             $result = search_all_profiles();

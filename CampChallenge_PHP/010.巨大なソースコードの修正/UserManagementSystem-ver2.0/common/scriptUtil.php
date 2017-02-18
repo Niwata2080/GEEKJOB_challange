@@ -38,6 +38,15 @@ function form_value($name){
     }
 }
 
+/*情報詳細画面で取って保存したレコードの値を返却*/
+function searched_value($name){
+    if(isset($_POST['mode']) && ($_POST['mode']=='UPDATE' || $_POST['mode']=='DELETE')){
+        if(isset($_SESSION['result'])){
+            return $_SESSION['result'][0][$name];
+        }
+    }
+}
+
 /**
  * ポストからセッションに存在チェックしてから値を渡す。
  * 二回目以降のアクセス用に、ポストから値の上書きがされない該当セッションは初期化する

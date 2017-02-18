@@ -15,6 +15,14 @@ require_once '../common/dbaccesUtil.php';
     $result = profile_detail($_GET['id']);
     //エラーが発生しなければ表示を行う
     if(is_array($result)){
+        session_start();
+        //↑でGETのidを使って取ったレコードをセッションに格納
+        $_SESSION['result'] = $result;
+        //birthday文字列を年月日に分解、改めて格納
+        $pieces = explode("-", $result[0]['birthday']);
+        $_SESSION['result'][0]['year'] = $pieces[0];
+        $_SESSION['result'][0]['month'] = $pieces[1];
+        $_SESSION['result'][0]['day'] = $pieces[2];
     ?>
       
     <h1>詳細情報</h1>
@@ -27,15 +35,25 @@ require_once '../common/dbaccesUtil.php';
     
     <form action="<?php echo UPDATE; ?>" method="POST">
         <input type="submit" name="update" value="変更"style="width:100px">
+        <input type="hidden" name="mode" value="UPDATE">
     </form>
     <form action="<?php echo DELETE; ?>" method="POST">
         <input type="submit" name="delete" value="削除"style="width:100px">
+        <input type="hidden" name="mode" value="DELETE">
     </form>
-    
     <?php
     }else{
         echo 'データの検索に失敗しました。次記のエラーにより処理を中断します:'.$result;
-    }
+    } ?>
+    <!--保存された検索条件を使って戻る-->
+    <form action="<?php echo SEARCH_RESULT; ?>" method="GET">
+        <input type="submit" name="result" value="検索結果へ戻る"style="width:100px">
+        <input type="hidden" name="name" value="<?php echo $_SESSION['sname'];?>">
+        <input type="hidden" name="year" value="<?php echo $_SESSION['syear'];?>">
+        <input type="hidden" name="type" value="<?php echo $_SESSION['stype'];?>">
+        <input type="hidden" name="mode" value="SEARCHING">
+    </form>
+    <?php
     echo return_top(); 
     ?>
   </body>

@@ -111,9 +111,9 @@ function search_profiles($name=null,$year=null,$type=null){  //フォームか�
     $search_query = $search_db->prepare($search_sql);
     
     //↑の分岐に合わせてバインドも分岐させる ％ってなんだっけ？
-    if($havename){$search_query->bindValue(':name','%'.$name.'%');}
-    if($haveyear){$search_query->bindValue(':year','%'.$year.'%');}
-    if($havetype){$search_query->bindValue(':type',$type);}
+    if($havename)$search_query->bindValue(':name','%'.$name.'%');
+    if($haveyear)$search_query->bindValue(':year','%'.$year.'%');
+    if($havetype)$search_query->bindValue(':type',$type);
     var_dump($search_query);
     //SQLを実行
     try{
@@ -153,11 +153,43 @@ function profile_detail($id){
     return $detail_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
+
+function update_profile($id, $name, $birthday, $type, $tell, $comment){
+    //db接続を確立
+    $update_db = connect2MySQL();
+    
+    $update_sql = "UPDATE user_t SET name=:name, birthday=:birthday, tell=:tell, type=:type, comment=:comment, newDate=:newDate WHERE userID=:id";
+
+    //現在時をdatetime型で取得
+    $datetime =new DateTime();
+    $date = $datetime->format('Y-m-d H:i:s');
+
+    //クエリとして用意
+    $update_query = $update_db->prepare($update_sql);
+    
+    $update_query->bindValue(':id',$id);
+    $update_query->bindValue(':name',$name);
+    $update_query->bindValue(':birthday',$birthday);
+    $update_query->bindValue(':tell',$tell);
+    $update_query->bindValue(':type',$type);
+    $update_query->bindValue(':comment',$comment);
+    $update_query->bindValue(':newDate',$date);
+    //SQLを実行
+    try{
+        $update_query->execute();
+    } catch (PDOException $e) {
+        $update_query=null;
+        return $e->getMessage();
+    }
+    return null;
+}
+
 function delete_profile($id){
     //db接続を確立
     $delete_db = connect2MySQL();
     
-    $delete_sql = "DELEtE * FROM user_t WHERE userID=:id";
+    $delete_sql = "DELETE FROM user_t WHERE userID=:id";  //SQL文が間違ってた
     
     //クエリとして用意
     $delete_query = $delete_db->prepare($delete_sql);
